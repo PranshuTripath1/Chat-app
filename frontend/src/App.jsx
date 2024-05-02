@@ -1,20 +1,23 @@
-const MessageSkeleton = () => {
+import { Navigate, Route, Routes } from "react-router-dom";
+import "./App.css";
+import Home from "./pages/home/Home";
+import Login from "./pages/login/Login";
+import SignUp from "./pages/signup/SignUp";
+import { Toaster } from "react-hot-toast";
+import { useAuthContext } from "./context/AuthContext";
+
+function App() {
+	const { authUser } = useAuthContext();
 	return (
-		<>
-			<div className='flex gap-3 items-center'>
-				<div className='skeleton w-10 h-10 rounded-full shrink-0'></div>
-				<div className='flex flex-col gap-1'>
-					<div className='skeleton h-4 w-40'></div>
-					<div className='skeleton h-4 w-40'></div>
-				</div>
-			</div>
-			<div className='flex gap-3 items-center justify-end'>
-				<div className='flex flex-col gap-1'>
-					<div className='skeleton h-4 w-40'></div>
-				</div>
-				<div className='skeleton w-10 h-10 rounded-full shrink-0'></div>
-			</div>
-		</>
+		<div className='p-4 h-screen flex items-center justify-center'>
+			<Routes>
+				<Route path='/' element={authUser ? <Home /> : <Navigate to={"/login"} />} />
+				<Route path='/login' element={authUser ? <Navigate to='/' /> : <Login />} />
+				<Route path='/signup' element={authUser ? <Navigate to='/' /> : <SignUp />} />
+			</Routes>
+			<Toaster />
+		</div>
 	);
-};
-export default MessageSkeleton;
+}
+
+export default App;
